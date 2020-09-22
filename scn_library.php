@@ -66,7 +66,7 @@ class Scn_connection{
             $conn->close();
     }
 
-    function scn_insert_data($table_name,$json_details){ //(table_name[String], json_details[innput in json format {"field_Name":"Value"}])
+    function scn_insert_record($table_name,$json_details){ //(table_name[String], json_details[innput in json format {"field_Name":"Value"} note* only string])
         $conn=$this->conn;
         $field_ar=Array();
         $value_ar=Array();
@@ -82,7 +82,7 @@ class Scn_connection{
                 $conn_return = new Error_api(0,"New record created successfully", "New record created successfully");
                 return $conn_return;
             } else {
-                $conn_return = new Error_api(0,"Error: " . $sql, $conn->error);
+                $conn_return = new Error_api(1,"Error: " . $sql, $conn->error);
                 return $conn_return;
             }
 
@@ -142,16 +142,53 @@ class Scn_connection{
         }
         $conn->close();
     }
+
+    function scn_delete_record($table_name, $where_exp){  //(table name, Where expression )
+        $conn=$this->conn;
+        $sql = "DELETE FROM ".$table_name." WHERE ".$where_exp;
+        if ($conn->query($sql) === TRUE) {
+            return new Error_api(0,"Record deleted successfully","Record deleted successfully");
+        } else {
+            return new Error_api(1,"Error deleting record",$conn->error);
+        }
+
+        $conn->close();
+    }
+
+    function scn_update_record($table_name,$json_details, $where_exp){ //(table_name[String], json_details[innput in json format {"field_Name":"Value"} note* only string], where expression [Only expression not 'WHERE'])
+        $conn=$this->conn;
+        $field_ar=Array();
+        $obj = json_decode($json_details, TRUE);
+        foreach($obj as $key => $value) {
+            array_push($field_ar,$key."='".$value."'");
+        }
+        $sql = "UPDATE ".$table_name." SET ".implode($field_ar,",")." WHERE ".$where_exp;
+            if ($conn->query($sql) === TRUE) {
+                $conn_return = new Error_api(0,"Record Updated successfully", "Record Updated successfully");
+                return $conn_return;
+            } else {
+                $conn_return = new Error_api(1,"Error: " . $sql, $conn->error);
+                return $conn_return;
+            }
+
+            $conn->close();
+    }
 }
 
 $connection = new Scn_connection("localhost","root","","newdbscn");
 //print_r($connection->scn_create_table("CREATE TABLE MyGuests (    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,    firstname VARCHAR(30) NOT NULL,    lastname VARCHAR(30) NOT NULL,    email VARCHAR(50),    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"));
 
-//print_r($connection->scn_insert_data('myguests','{"firstname":"Sachin","lastname":"Thakur","email":"scn.arn@gmail.com"}'));
+//print_r($connection->scn_insert_record('myguests','{"firstname":"Sachin","lastname":"Thakur","email":"scn.arn@gmail.com"}'));
 
 // $temp_result=$connection->scn_select_all("myguests","id>7",true,"firstname");//(table_name, where_expression,distinct,orderby)
     // print_r($temp_result->result[2]["firstname"]);
 
 //  $temp_result=$connection->scn_select_column("myguests",Array("firstname","lastname"));//(table_name, where_expression,distinct,orderby)
 //      print_r($temp_result->result[0]);
+
+// $temp = $connection->scn_delete_record("myguests","id=8"); //be carefule in 2nd parameter
+// print_r($temp);
+
+$temp = $connection->scn_update_record('myguests','{"firstname":"Scn","lastname":"arayans"}','id=10');
+print_r($temp);
 ?>
