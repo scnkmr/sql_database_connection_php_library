@@ -70,9 +70,9 @@ class Scn_connection{
         $conn=$this->conn;
         $field_ar=Array();
         $value_ar=Array();
+        $json_details = str_replace(array("\n","\r"), '', $json_details);  // it remove new line from json (prevent error | error : wrong input for foreach function )
         $obj = json_decode($json_details, TRUE);
         foreach($obj as $key => $value) {
-            //echo 'Your key is: '.$key.' and the value of the key is:'.$value;
             array_push($field_ar,$key);
             array_push($value_ar,$value);
         }
@@ -130,7 +130,7 @@ class Scn_connection{
         $sql = "SELECT ".$distinct." ".implode($column_ar,',')." FROM ".$table_name.$where_exp.$orderby;
         $result = $conn->query($sql);
         $result_ar=Array();
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
         //output data of each row
         for($i=0;$row[$i] = $result->fetch_assoc();$i++) {
             //echo "id: " . $row[$i]["id"]. " - Name: " . $row[$i]["firstname"]. " " . $row[$i]["lastname"]. "<br>";
@@ -158,6 +158,7 @@ class Scn_connection{
     function scn_update_record($table_name,$json_details, $where_exp){ //(table_name[String], json_details[innput in json format {"field_Name":"Value"} note* only string], where expression [Only expression not 'WHERE'])
         $conn=$this->conn;
         $field_ar=Array();
+        $json_details = str_replace(array("\n","\r"), '', $json_details);  // it remove new line from json (prevent error | error : wrong input for foreach function )
         $obj = json_decode($json_details, TRUE);
         foreach($obj as $key => $value) {
             array_push($field_ar,$key."='".$value."'");
@@ -175,7 +176,8 @@ class Scn_connection{
     }
 }
 
-$connection = new Scn_connection("localhost","root","","newdbscn");
+//Examples
+//$connection = new Scn_connection("localhost","root","","newdbscn");
 //print_r($connection->scn_create_table("CREATE TABLE MyGuests (    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,    firstname VARCHAR(30) NOT NULL,    lastname VARCHAR(30) NOT NULL,    email VARCHAR(50),    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"));
 
 //print_r($connection->scn_insert_record('myguests','{"firstname":"Sachin","lastname":"Thakur","email":"scn.arn@gmail.com"}'));
@@ -189,6 +191,6 @@ $connection = new Scn_connection("localhost","root","","newdbscn");
 // $temp = $connection->scn_delete_record("myguests","id=8"); //be carefule in 2nd parameter
 // print_r($temp);
 
-$temp = $connection->scn_update_record('myguests','{"firstname":"Scn","lastname":"arayans"}','id=10');
-print_r($temp);
+// $temp = $connection->scn_update_record('myguests','{"firstname":"Scn","lastname":"arayans"}','id=10');
+// print_r($temp);
 ?>
