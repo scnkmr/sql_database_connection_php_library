@@ -77,9 +77,9 @@ class Scn_connection{
             array_push($value_ar,$value);
         }
         $sql = "INSERT INTO ".$table_name." (".implode($field_ar,',').")
-            VALUES ('".implode($value_ar,' \',\' ')."')";
+            VALUES ('".implode($value_ar,'\',\'')."')";
             if ($conn->query($sql) === TRUE) {
-                $conn_return = new Error_api(0,"New record created successfully", "New record created successfully");
+                $conn_return = new Error_api(0,"New record created successfully", $conn->insert_id);
                 return $conn_return;
             } else {
                 $conn_return = new Error_api(1,"Error: " . $sql, $conn->error);
@@ -176,7 +176,6 @@ class Scn_connection{
     }
 }
 
-//Examples
 //$connection = new Scn_connection("localhost","root","","newdbscn");
 //print_r($connection->scn_create_table("CREATE TABLE MyGuests (    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,    firstname VARCHAR(30) NOT NULL,    lastname VARCHAR(30) NOT NULL,    email VARCHAR(50),    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"));
 
