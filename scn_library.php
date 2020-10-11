@@ -1,7 +1,9 @@
 <?php
-/*{
+/*
+The Error will be in this format
+{
     error:1,
-    message:"",
+    message:"Message of Error",
     result: "resutl may be array object or any thing"
 }*/
 class Error_api{
@@ -82,7 +84,7 @@ class Scn_connection{
                 $conn_return = new Error_api(0,"New record created successfully", $conn->insert_id);
                 return $conn_return;
             } else {
-                $conn_return = new Error_api(1,"Error: " . $sql, $conn->error);
+                $conn_return = new Error_api(1, $conn->error, "Error: " . $sql);
                 return $conn_return;
             }
 
@@ -103,7 +105,7 @@ class Scn_connection{
         $sql = "SELECT ".$distinct." * FROM ".$table_name.$where_exp.$orderby;
         $result = $conn->query($sql);
         $result_ar=Array();
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
         //output data of each row
         for($i=0;$row[$i] = $result->fetch_assoc();$i++) {
             //echo "id: " . $row[$i]["id"]. " - Name: " . $row[$i]["firstname"]. " " . $row[$i]["lastname"]. "<br>";
