@@ -1,8 +1,8 @@
-#It is made to DRY [Do not Repeat Yourself]
-#used to establish connection to sql server and perform various functionlities
+# It is made to DRY [Do not Repeat Yourself]
+# used to establish connection to sql server and perform various functionlities
 
-##Tutorial
-###Q1: How to Make connection?
+## Tutorial
+### Q1: How to Make connection?
 Ans: 
 ```php
 
@@ -13,7 +13,7 @@ $connection = new Scn_connection("localhost","root","","newdbscn");
 - 3rd parameter => password
 - fourth parameter => databasename  [Optional you can leave it blank if you have not created database yet]
 
-###Q2: How to Create Database?
+### Q2: How to Create Database?
 Ans:
 ```php 
 $connection = new Scn_connection("localhost","root","");  //Establishing Connection
@@ -25,13 +25,13 @@ $temp = $connection->scn_create_database($database_name);
 - this will return an object
 ```json
 {
-    error:0,        //1 (error will be 1 if occured)
-    message: text   //(Message by author of library)
-    result: result  //(error message if error occured Otherwise it will return result, it may be object, array or any string and number)
+    "error":0,        //1 (error will be 1 if occured)
+    "message": "text",   //(Message by author of library)
+    "result": "result"  //(error message if error occured Otherwise it will return result, it may be object, array or any string and number)
 }
 ```
 
-###Q3: How to create table?
+### Q3: How to create table?
 Ans: 
 ```php
 $connection = new Scn_connection("localhost","root","","newdbscn");
@@ -42,7 +42,7 @@ print_r($temp);
 - for example 
 - ``` $sql="CREATE TABLE MyGuests (    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,    firstname VARCHAR(30) NOT NULL,    lastname VARCHAR(30) NOT NULL,    email VARCHAR(50),    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)" ```
 
-###Q4: How to insert Data into table?
+### Q4: How to insert Data into table?
 Ans:
 ```php
 $connection = new Scn_connection("localhost","root","","newdbscn");
@@ -52,7 +52,7 @@ $connection->scn_insert_record('myguests','{"firstname":"Sachin","lastname":"Tha
 - 1st parameter => table name
 - 2nd parameter => json format {"key":"value"} where key is field name & value contaiin value of that field
 
-###Q5: how to select all database?
+### Q5: how to select all database?
 Ans:
 ```php
 $connection = new Scn_connection("localhost","root","","newdbscn");
@@ -67,7 +67,7 @@ print_r($temp_result->result[2]["firstname"]);
 
 - return Error_api mentioned in Q2
 
-###Q6: how to select selected column of database?
+### Q6: how to select selected column of database?
 Ans:
 ```php
 $connection = new Scn_connection("localhost","root","","newdbscn");
@@ -83,7 +83,7 @@ $temp_result=$connection->scn_select_column("myguests",Array("firstname","lastna
 
 - return Error_api mentioned in Q2
 
-###Q7: How to delete record?
+### Q7: How to delete record?
 Ans:
 ```php
 $connection = new Scn_connection("localhost","root","","newdbscn");
@@ -96,7 +96,7 @@ print_r($temp);
 
 - return Error_api mentioned in Q2
 
-###Q8: How to update record?
+### Q8: How to update record?
 Ans:
 ```php
 $connection = new Scn_connection("localhost","root","","newdbscn");
