@@ -1,4 +1,4 @@
-# It is made to DRY [Do not Repeat Yourself]
+#It is made to DRY [Do not Repeat Yourself]
 #used to establish connection to sql server and perform various functionlities
 
 ##Tutorial
